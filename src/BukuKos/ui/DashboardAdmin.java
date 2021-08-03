@@ -114,7 +114,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
         btn_pengguna.setBackground(new java.awt.Color(153, 0, 0));
         btn_pengguna.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btn_pengguna.setForeground(new java.awt.Color(255, 255, 255));
-        btn_pengguna.setText("DATA AKUN");
+        btn_pengguna.setText("REGISTER");
         btn_pengguna.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_penggunaActionPerformed(evt);
@@ -123,13 +123,13 @@ public class DashboardAdmin extends javax.swing.JFrame {
         getContentPane().add(btn_pengguna, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 240, 90, 23));
 
         btn_exit2.setBackground(new java.awt.Color(255, 255, 255));
-        btn_exit2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/BukuKos/icon/exitt(2).png"))); // NOI18N
+        btn_exit2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/BukuKos/icon/logout.png"))); // NOI18N
         btn_exit2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_exit2ActionPerformed(evt);
             }
         });
-        getContentPane().add(btn_exit2, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 330, 40, 30));
+        getContentPane().add(btn_exit2, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 320, 40, 40));
 
         btn_exit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/BukuKos/icon/11.png"))); // NOI18N
         getContentPane().add(btn_exit, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 670, 340));
@@ -148,7 +148,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_datatagihanActionPerformed
 
     private void btn_exit2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_exit2ActionPerformed
-        new TampilanAwal().show();
+        new MasukAkun().show();
         this.dispose();
     }//GEN-LAST:event_btn_exit2ActionPerformed
 

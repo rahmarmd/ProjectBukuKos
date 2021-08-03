@@ -11,10 +11,10 @@ package BukuKos.model;
  */
 public class DataPenghuni2 {
     
-    int no_ktp;
+    String no_ktp;
     String id_member, nama_member, alamat, id_kamar, tgl_masuk;
     
-    public DataPenghuni2 (String id_member, int no_ktp, String nama_member, String alamat, String id_kamar, String tgl_masuk){
+    public DataPenghuni2 (String id_member, String no_ktp, String nama_member, String alamat, String id_kamar, String tgl_masuk){
         this.id_member = id_member;
         this.no_ktp = no_ktp;
         this.nama_member = nama_member;
@@ -23,11 +23,11 @@ public class DataPenghuni2 {
         this.tgl_masuk = tgl_masuk;
     }
 
-    public int getNo_ktp() {
+    public String getNo_ktp() {
         return no_ktp;
     }
 
-    public void setNo_ktp(int no_ktp) {
+    public void setNo_ktp(String no_ktp) {
         this.no_ktp = no_ktp;
     }
 

@@ -7,15 +7,25 @@ package BukuKos.ui;
 
 import BukuKos.helper.Koneksi2;
 import java.sql.Connection;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
-public class MasukAkun extends javax.swing.JFrame {
+/**
+ *
+ * @author HP
+ */
+public class Register extends javax.swing.JFrame {
 
-    public MasukAkun() {
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+
+    /**
+     * Creates new form Register
+     */
+    public Register() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -33,8 +43,8 @@ public class MasukAkun extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        txt_user2 = new javax.swing.JTextField();
-        txt_pass2 = new javax.swing.JPasswordField();
+        username_txt = new javax.swing.JTextField();
+        password_txt = new javax.swing.JPasswordField();
         btn_masukakun2 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
@@ -44,7 +54,7 @@ public class MasukAkun extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         labelRegister.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        labelRegister.setText("Register Disini ");
+        labelRegister.setText("Login Disini");
         labelRegister.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 labelRegisterMouseClicked(evt);
@@ -53,8 +63,8 @@ public class MasukAkun extends javax.swing.JFrame {
         getContentPane().add(labelRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 310, 110, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel5.setText("Belum punya akun ?");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 310, 130, -1));
+        jLabel5.setText("Sudah punya akun ? ");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 310, 150, -1));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/BukuKos/icon/loginnnn.png"))); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 41, -1, 50));
@@ -71,23 +81,23 @@ public class MasukAkun extends javax.swing.JFrame {
         jLabel4.setText("Username");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, 100, -1));
 
-        txt_user2.addActionListener(new java.awt.event.ActionListener() {
+        username_txt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_user2ActionPerformed(evt);
+                username_txtActionPerformed(evt);
             }
         });
-        getContentPane().add(txt_user2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 140, 500, 30));
+        getContentPane().add(username_txt, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 140, 500, 30));
 
-        txt_pass2.addActionListener(new java.awt.event.ActionListener() {
+        password_txt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_pass2ActionPerformed(evt);
+                password_txtActionPerformed(evt);
             }
         });
-        getContentPane().add(txt_pass2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 200, 500, 30));
+        getContentPane().add(password_txt, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 200, 500, 30));
 
         btn_masukakun2.setBackground(new java.awt.Color(0, 0, 204));
         btn_masukakun2.setForeground(new java.awt.Color(255, 255, 255));
-        btn_masukakun2.setText("Masuk Akun");
+        btn_masukakun2.setText("Daftar Akun");
         btn_masukakun2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_masukakun2ActionPerformed(evt);
@@ -110,55 +120,64 @@ public class MasukAkun extends javax.swing.JFrame {
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 670, 340));
 
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txt_user2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_user2ActionPerformed
+    private void username_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_username_txtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txt_user2ActionPerformed
+    }//GEN-LAST:event_username_txtActionPerformed
+
+    private void password_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_password_txtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_password_txtActionPerformed
 
     private void btn_masukakun2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_masukakun2ActionPerformed
         // TODO add your handling code here:
-
         try {
-            Connection kon = Koneksi2.getConnection();
-            Statement st = kon.createStatement();
-            String sql = "SELECT * FROM tb_login WHERE username='" + txt_user2.getText() + "' "
-                    + "and password_2='" + txt_pass2.getText() + "'";
-            ResultSet rs = st.executeQuery(sql);
+            Connection con = Koneksi2.getConnection();
+            //query insert data ke dalam database mysql
+            pst = con.prepareStatement("INSERT INTO tb_login (username, password_2, id_level) VALUES(?,?,1)");
+            //validasi ketika textField kosong
 
-            if (rs.next()) {
-                if (rs.getString("id_level").equals("1")) {
-                    new DashboardAdmin().show();
-                    this.dispose();
-                }
-
+            if (username_txt.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Username tidak boleh kosong");
+            } else if (password_txt.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Password tidak boleh kosong");
             } else {
-                JOptionPane.showMessageDialog(null, "Maaf Username atau Password Salah");
-                txt_user2.setText("");
-                txt_pass2.setText("");
-                txt_user2.requestFocus();
+                //digunakan untuk memasukkan data ke masing2 variabel textfield seperti namaTxt, dll
+
+                //misal bingung pst sama rs bisa diliat di variabel diatas
+                pst.setString(1, username_txt.getText());
+                pst.setString(2, password_txt.getText());
+                pst.executeUpdate();
+
+                //setelah nginput data kasih ini biar textfieldnya kosong lagi
+                username_txt.setText("");
+                password_txt.setText("");
+
+                //setelah daftar muncul pop up dafatar berhasil dan akan tampil frame baru
+                JOptionPane.showMessageDialog(null, "Registrasi Berhasil");
+                MasukAkun ma = new MasukAkun();
+                ma.setVisible(true);
+                this.dispose();
             }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
+
+        } catch (Exception e) {
+//            JOptionPane.showMessageDialog(null, "Error " + e.getMessage());
+            e.printStackTrace();
         }
 
     }//GEN-LAST:event_btn_masukakun2ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
 
-    private void txt_pass2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_pass2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_pass2ActionPerformed
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void labelRegisterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelRegisterMouseClicked
         // TODO add your handling code here:
-        Register re = new Register();
-        re.setVisible(true);
+        MasukAkun ma = new MasukAkun();
+        ma.setVisible(true);
         this.dispose();
-        
     }//GEN-LAST:event_labelRegisterMouseClicked
 
     /**
@@ -178,20 +197,20 @@ public class MasukAkun extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MasukAkun.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MasukAkun.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MasukAkun.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MasukAkun.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MasukAkun().setVisible(true);
+                new Register().setVisible(true);
             }
         });
     }
@@ -207,7 +226,7 @@ public class MasukAkun extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel labelRegister;
-    private javax.swing.JPasswordField txt_pass2;
-    private javax.swing.JTextField txt_user2;
+    private javax.swing.JPasswordField password_txt;
+    private javax.swing.JTextField username_txt;
     // End of variables declaration//GEN-END:variables
 }

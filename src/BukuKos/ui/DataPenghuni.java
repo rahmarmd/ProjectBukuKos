@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import BukuKos.model.DataPenghuni2;
+import java.text.SimpleDateFormat;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
 
@@ -23,8 +24,10 @@ import javax.swing.table.TableRowSorter;
  * @author HP
  */
 public class DataPenghuni extends javax.swing.JFrame {
+
     PreparedStatement pst = null;
     ResultSet rs = null;
+
     /**
      * Creates new form DataMember
      */
@@ -33,8 +36,8 @@ public class DataPenghuni extends javax.swing.JFrame {
         updateCombo();
         fitchData();
     }
-    
-   private void updateCombo() {
+
+    private void updateCombo() {
         String sql = "Select * from tb_kamar";
         try {
             Connection con = Koneksi2.getConnection();
@@ -42,14 +45,14 @@ public class DataPenghuni extends javax.swing.JFrame {
             rs = pst.executeQuery();
             while (rs.next()) {
 //                comboBoxProfesi.addItem(rs.getString("id_kategori"));
-                combo_id_kamar.addItem(rs.getString("id_kamar") + " | " + rs.getString("tarif"));
+                combo_id_kamar.addItem(rs.getString("id_kamar"));
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error" + e.getMessage());
         }
     }
-   
-       //penempatan dan pencocokan data tabel di database dan di tabel JTable
+
+    //penempatan dan pencocokan data tabel di database dan di tabel JTable
     private void fitchData() {
         ArrayList<DataPenghuni2> list = dataPenghuni();
         DefaultTableModel model = (DefaultTableModel) member_table.getModel();
@@ -66,8 +69,8 @@ public class DataPenghuni extends javax.swing.JFrame {
             model.addRow(row);
         }
     }
-    
-        //perintah untuk memasukkan data ke dalam tabel dan select data
+
+    //perintah untuk memasukkan data ke dalam tabel dan select data
     public ArrayList<DataPenghuni2> dataPenghuni() {
         ArrayList<DataPenghuni2> dataPenghuni = new ArrayList<>();
         try {
@@ -77,7 +80,7 @@ public class DataPenghuni extends javax.swing.JFrame {
             rs = pst.executeQuery();
             DataPenghuni2 DataPenghuni;
             while (rs.next()) {
-                DataPenghuni = new DataPenghuni2(rs.getString("id_member"), rs.getInt("no_ktp"), rs.getString("nama_member"), rs.getString("alamat"), rs.getString("id_kamar"), rs.getString("tgl_masuk"));
+                DataPenghuni = new DataPenghuni2(rs.getString("id_member"), rs.getString("no_ktp"), rs.getString("nama_member"), rs.getString("alamat"), rs.getString("id_kamar"), rs.getString("tgl_masuk"));
                 dataPenghuni.add(DataPenghuni);
             }
         } catch (Exception e) {
@@ -85,8 +88,6 @@ public class DataPenghuni extends javax.swing.JFrame {
         }
         return dataPenghuni;
     }
-   
-   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -107,6 +108,7 @@ public class DataPenghuni extends javax.swing.JFrame {
         btn_resfresh2 = new javax.swing.JButton();
         btn_kembali2 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
+        txt_tglbayar = new com.toedter.calendar.JDateChooser();
         jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         txt_idmember = new javax.swing.JTextField();
@@ -118,7 +120,6 @@ public class DataPenghuni extends javax.swing.JFrame {
         txt_ktp = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        txt_tglmasuk = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         txt_alamat = new javax.swing.JTextArea();
         combo_id_kamar = new javax.swing.JComboBox<>();
@@ -203,6 +204,7 @@ public class DataPenghuni extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel1.add(txt_tglbayar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 210, 190, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel8.setText("DATA PENGHUNI");
@@ -222,7 +224,7 @@ public class DataPenghuni extends javax.swing.JFrame {
         jLabel3.setText("Nama ");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, -1));
 
-        jLabel5.setText("ID Kamar");
+        jLabel5.setText("No Kamar");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, -1, -1));
         jPanel1.add(txt_ktp, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 90, 240, -1));
 
@@ -231,7 +233,6 @@ public class DataPenghuni extends javax.swing.JFrame {
 
         jLabel11.setText("Alamat");
         jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, -1, -1));
-        jPanel1.add(txt_tglmasuk, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 210, 240, -1));
 
         txt_alamat.setColumns(20);
         txt_alamat.setRows(5);
@@ -282,6 +283,10 @@ public class DataPenghuni extends javax.swing.JFrame {
         // masukan data ke dalam database
         String penghuniItem = combo_id_kamar.getSelectedItem().toString();
         String penghuni = penghuniItem.split("\\)", 2)[0];
+        SimpleDateFormat Date_Format = new SimpleDateFormat("yyyy-MM-dd");
+        String number = txt_ktp.getText();
+       
+
         try {
             Connection con = Koneksi2.getConnection();
             //query insert data ke dalam database mysql
@@ -296,30 +301,31 @@ public class DataPenghuni extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Nama Member tidak boleh kosong");
             } else if (txt_alamat.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Alamat tidak boleh kosong");
-            }  else if (txt_tglmasuk.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Tgl Masuk tidak boleh kosong");
             } else {
                 //digunakan untuk memasukkan data ke masing2 variabel textfield seperti namaTxt, dll
+                if (!number.matches("[0-9]+") || !number.matches("^(\\d{10}|\\d{12})$")) {
+                   JOptionPane.showMessageDialog(rootPane, "Tidak boleh memasukkan huruf dan Minimal 12 Digit KTP !");
+                } else {
+                    pst.setString(1, txt_idmember.getText());
+                    pst.setString(2, txt_ktp.getText());
+                    pst.setString(3, txt_nama.getText());
+                    pst.setString(4, txt_alamat.getText());
+                    pst.setString(5, penghuni);
+                    pst.setString(6, Date_Format.format(txt_tglbayar.getDate()));
+                    pst.executeUpdate();
 
+                    //setelah nginput data kasih ini biar textfieldnya kosong lagi
+                    txt_idmember.setText("");
+                    txt_ktp.setText("");
+                    txt_nama.setText("");
+                    txt_alamat.setText("");
+                    combo_id_kamar.setSelectedItem("");
+
+                    //setelah daftar muncul pop up dafatar berhasil dan akan tampil frame baru
+                    JOptionPane.showMessageDialog(null, "Tambah Data Berhasil");
+                }
                 //misal bingung pst sama rs bisa diliat di variabel diatas
-                pst.setString(1, txt_idmember.getText());
-                pst.setString(2, txt_ktp.getText());
-                pst.setString(3, txt_nama.getText());
-                pst.setString(4, txt_alamat.getText());
-                pst.setString(5, penghuni);
-                pst.setString(6, txt_tglmasuk.getText());
-                pst.executeUpdate();
 
-                //setelah nginput data kasih ini biar textfieldnya kosong lagi
-                txt_idmember.setText("");
-                txt_ktp.setText("");
-                txt_nama.setText("");
-                txt_alamat.setText("");
-                combo_id_kamar.setSelectedItem("");
-                txt_tglmasuk.setText("");
-
-                //setelah daftar muncul pop up dafatar berhasil dan akan tampil frame baru
-                JOptionPane.showMessageDialog(null, "Tambah Data Berhasil");
             }
 
         } catch (Exception e) {
@@ -338,6 +344,7 @@ public class DataPenghuni extends javax.swing.JFrame {
     private void btn_edit2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_edit2ActionPerformed
         String penghuniItem = combo_id_kamar.getSelectedItem().toString();
         String penghuni = penghuniItem.split("\\)", 2)[0];
+        SimpleDateFormat Date_Format = new SimpleDateFormat("yyyy-MM-dd");
         //action button untuk mengedit data
         try {
 
@@ -353,8 +360,6 @@ public class DataPenghuni extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Nama Member tidak boleh kosong");
             } else if (txt_alamat.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Alamat tidak boleh kosong");
-            }  else if (txt_tglmasuk.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Tgl Masuk tidak boleh kosong");
             } else {
                 pst = con.prepareStatement(sql);
                 pst.setString(1, txt_idmember.getText());
@@ -362,7 +367,7 @@ public class DataPenghuni extends javax.swing.JFrame {
                 pst.setString(3, txt_nama.getText());
                 pst.setString(4, txt_alamat.getText());
                 pst.setString(5, penghuni);
-                pst.setString(6, txt_tglmasuk.getText());
+                pst.setString(6, Date_Format.format(txt_tglbayar.getDate()));
                 pst.executeUpdate();
 
                 DefaultTableModel model = (DefaultTableModel) member_table.getModel();
@@ -373,7 +378,7 @@ public class DataPenghuni extends javax.swing.JFrame {
                 txt_nama.setText("");
                 txt_alamat.setText("");
                 combo_id_kamar.setSelectedItem("");
-                txt_tglmasuk.setText("");
+
                 JOptionPane.showMessageDialog(null, "Edit Selesai");
             }
         } catch (Exception e) {
@@ -390,7 +395,7 @@ public class DataPenghuni extends javax.swing.JFrame {
         txt_ktp.setText(model.getValueAt(i, 1).toString());
         txt_nama.setText(model.getValueAt(i, 2).toString());
         txt_alamat.setText(model.getValueAt(i, 3).toString());
-        txt_tglmasuk.setText(model.getValueAt(i, 5).toString());
+
     }//GEN-LAST:event_member_tableMouseClicked
 
     private void btn_hapus2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_hapus2ActionPerformed
@@ -420,7 +425,7 @@ public class DataPenghuni extends javax.swing.JFrame {
         String search = txt_cari3.getText().toLowerCase();
         TableRowSorter<DefaultTableModel> tr = new TableRowSorter<DefaultTableModel>(table);
         member_table.setRowSorter(tr);
-        tr.setRowFilter(RowFilter.regexFilter(search));   
+        tr.setRowFilter(RowFilter.regexFilter(search));
     }//GEN-LAST:event_txt_cari3KeyReleased
 
     /**
@@ -488,6 +493,6 @@ public class DataPenghuni extends javax.swing.JFrame {
     private javax.swing.JTextField txt_idmember;
     private javax.swing.JTextField txt_ktp;
     private javax.swing.JTextField txt_nama;
-    private javax.swing.JTextField txt_tglmasuk;
+    private com.toedter.calendar.JDateChooser txt_tglbayar;
     // End of variables declaration//GEN-END:variables
 }

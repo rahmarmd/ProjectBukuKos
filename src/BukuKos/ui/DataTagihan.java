@@ -14,16 +14,15 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import BukuKos.model.DataTagihan2;
+import java.text.SimpleDateFormat;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
 
-
-
 public class DataTagihan extends javax.swing.JFrame {
-    
+
     PreparedStatement pst = null;
     ResultSet rs = null;
 
@@ -34,13 +33,10 @@ public class DataTagihan extends javax.swing.JFrame {
         initComponents();
         futchData();
     }
-    
-    
-           //penempatan dan pencocokan data tabel di database dan di tabel JTable
+
+    //penempatan dan pencocokan data tabel di database dan di tabel JTable
     private void futchData() {
-        String statusItem = txt_tglbayar.getText();
-        String status = statusItem.split("\\)", 2)[0];
-        String condi = txt_tglbayar.getText() == "0000-00-00" ? "0000-00-00" : status;
+
         ArrayList<DataTagihan2> list = dataTagihan();
         DefaultTableModel model = (DefaultTableModel) tagihan_table.getModel();
         Object[] row = new Object[6];
@@ -51,12 +47,12 @@ public class DataTagihan extends javax.swing.JFrame {
             row[1] = list.get(i).getId_member();
             row[2] = list.get(i).getTagihan();
             row[3] = list.get(i).getStatus_tagihan();
-            row[4] = list.get(i).getTgl_bayar() ;
+            row[4] = list.get(i).getTgl_bayar();
             model.addRow(row);
         }
     }
-    
-            //perintah untuk memasukkan data ke dalam tabel dan select data
+
+    //perintah untuk memasukkan data ke dalam tabel dan select data
     public ArrayList<DataTagihan2> dataTagihan() {
         ArrayList<DataTagihan2> dataTagihan = new ArrayList<>();
         try {
@@ -74,22 +70,16 @@ public class DataTagihan extends javax.swing.JFrame {
         }
         return dataTagihan;
     }
-    public void aturTanggal(){
-        if (combo_status.getSelectedItem().toString() == "Belum Lunas") {
-                    txt_tglbayar.setText("0000-00-00");
-                }else{
-            txt_tglbayar.getText();
-        }
-    }
-    public void tampilkanData(){
+
+    public void tampilkanData() {
         Koneksi2 koneksi = new Koneksi2();
         int jumlahrow = tagihan_table.getRowCount();
-        for(int n=0;n<jumlahrow;n++){
-          
+        for (int n = 0; n < jumlahrow; n++) {
+
+        }
+
     }
-        
-    }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -104,13 +94,13 @@ public class DataTagihan extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
+        txt_tglbayar = new com.toedter.calendar.JDateChooser();
         btn_tambah3 = new javax.swing.JButton();
         txt_idtagihan = new javax.swing.JTextField();
         txt_tagihan = new javax.swing.JTextField();
         combo_status = new javax.swing.JComboBox<>();
         txt_idmember = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        txt_tglbayar = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -149,6 +139,7 @@ public class DataTagihan extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(220, 221, 225));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel1.add(txt_tglbayar, new org.netbeans.lib.awtextra.AbsoluteConstraints(421, 130, 210, -1));
 
         btn_tambah3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/BukuKos/icon/button (1).png"))); // NOI18N
         btn_tambah3.setText("  Data Kamar");
@@ -172,14 +163,6 @@ public class DataTagihan extends javax.swing.JFrame {
 
         jLabel4.setText("ID Member");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 100, -1, -1));
-
-        txt_tglbayar.setText("1111-11-11");
-        txt_tglbayar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_tglbayarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txt_tglbayar, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 130, 210, -1));
 
         jLabel10.setText("Tgl Bayar");
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 130, -1, -1));
@@ -290,6 +273,8 @@ public class DataTagihan extends javax.swing.JFrame {
 
     private void btn_tambah3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_tambah3ActionPerformed
         // masukan data ke dalam database
+        SimpleDateFormat Date_Format = new SimpleDateFormat("yyyy-MM-dd");
+
         String statusItem = combo_status.getSelectedItem().toString();
         String status = statusItem.split("\\)", 2)[0];
         try {
@@ -312,7 +297,7 @@ public class DataTagihan extends javax.swing.JFrame {
                 pst.setString(2, txt_idmember.getText());
                 pst.setString(3, txt_tagihan.getText());
                 pst.setString(4, combo_status.getSelectedItem().toString());
-                pst.setString(5, txt_tglbayar.getText());
+                pst.setString(5, Date_Format.format(txt_tglbayar.getDate()));
                 pst.executeUpdate();
 
                 //setelah nginput data kasih ini biar textfieldnya kosong lagi
@@ -320,7 +305,6 @@ public class DataTagihan extends javax.swing.JFrame {
                 txt_idmember.setText("");
                 txt_tagihan.setText("");
                 combo_status.setSelectedItem("");
-                txt_tglbayar.setText("");
 
                 //setelah daftar muncul pop up dafatar berhasil dan akan tampil frame baru
                 JOptionPane.showMessageDialog(null, "Tambah Data Berhasil");
@@ -347,7 +331,7 @@ public class DataTagihan extends javax.swing.JFrame {
     private void txt_edit3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_edit3ActionPerformed
         String statusItem = combo_status.getSelectedItem().toString();
         String status = statusItem.split("\\)", 2)[0];
-        
+        SimpleDateFormat Date_Format = new SimpleDateFormat("yyyy-MM-dd");
         //action button untuk mengedit data
         try {
 
@@ -362,15 +346,13 @@ public class DataTagihan extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "ID Member tidak boleh kosong");
             } else if (txt_tagihan.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Tagihan tidak boleh kosong");
-            } else if (txt_tglbayar.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Tgl Bayar tidak boleh kosong");
             } else {
                 pst = con.prepareStatement(sql);
                 pst.setString(1, txt_idtagihan.getText());
                 pst.setString(2, txt_idmember.getText());
                 pst.setString(3, txt_tagihan.getText());
                 pst.setString(4, combo_status.getSelectedItem().toString());
-                pst.setString(5, txt_tglbayar.getText());
+                pst.setString(5, Date_Format.format(txt_tglbayar.getDate()));
                 pst.executeUpdate();
 
                 DefaultTableModel model = (DefaultTableModel) tagihan_table.getModel();
@@ -380,13 +362,13 @@ public class DataTagihan extends javax.swing.JFrame {
                 txt_idmember.setText("");
                 txt_tagihan.setText("");
                 combo_status.setSelectedItem("");
-                txt_tglbayar.setText("");
+               
                 JOptionPane.showMessageDialog(null, "Edit Selesai");
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(rootPane, e.getMessage());
         }
-        
+
     }//GEN-LAST:event_txt_edit3ActionPerformed
 
     private void tagihan_tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tagihan_tableMouseClicked
@@ -396,8 +378,8 @@ public class DataTagihan extends javax.swing.JFrame {
         txt_idtagihan.setText(model.getValueAt(i, 0).toString());
         txt_idmember.setText(model.getValueAt(i, 1).toString());
         txt_tagihan.setText(model.getValueAt(i, 2).toString());
-        txt_tglbayar.setText(model.getValueAt(i, 4).toString());
-         combo_status.setSelectedItem(model.getValueAt(i, 3).toString());
+      
+        combo_status.setSelectedItem(model.getValueAt(i, 3).toString());
     }//GEN-LAST:event_tagihan_tableMouseClicked
 
     private void txt_hapus3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_hapus3ActionPerformed
@@ -418,10 +400,6 @@ public class DataTagihan extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txt_hapus3ActionPerformed
 
-    private void txt_tglbayarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_tglbayarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_tglbayarActionPerformed
-
     private void txt_cari2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_cari2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_cari2ActionPerformed
@@ -431,15 +409,14 @@ public class DataTagihan extends javax.swing.JFrame {
         String search = txt_cari2.getText().toLowerCase();
         TableRowSorter<DefaultTableModel> tr = new TableRowSorter<DefaultTableModel>(table);
         tagihan_table.setRowSorter(tr);
-        tr.setRowFilter(RowFilter.regexFilter(search));       
+        tr.setRowFilter(RowFilter.regexFilter(search));
     }//GEN-LAST:event_txt_cari2KeyReleased
 
     private void btn_cetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cetakActionPerformed
-   try {
-        JasperPrint jp = JasperFillManager.fillReport(getClass().getResourceAsStream
-        ("reportTagihan.jasper"), null, Koneksi2.getConnection());
-        JasperViewer.viewReport(jp, false);
-        } catch(Exception e) {
+        try {
+            JasperPrint jp = JasperFillManager.fillReport(getClass().getResourceAsStream("reportTagihan.jasper"), null, Koneksi2.getConnection());
+            JasperViewer.viewReport(jp, false);
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(rootPane, e);
         }
 
@@ -511,6 +488,6 @@ public class DataTagihan extends javax.swing.JFrame {
     private javax.swing.JTextField txt_idmember;
     private javax.swing.JTextField txt_idtagihan;
     private javax.swing.JTextField txt_tagihan;
-    private javax.swing.JTextField txt_tglbayar;
+    private com.toedter.calendar.JDateChooser txt_tglbayar;
     // End of variables declaration//GEN-END:variables
 }
