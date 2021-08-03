@@ -11,11 +11,11 @@ package BukuKos.model;
  */
 public class DataTagihan2 {
     int tagihan;
-    String id_tagihan, id_member, status_tagihan, tgl_bayar;
+    String id_tagihan, nama_member, status_tagihan, tgl_bayar;
 
-    public DataTagihan2(String id_tagihan, String id_member, int tagihan, String status_tagihan, String tgl_bayar){
+    public DataTagihan2(String id_tagihan, String nama_member, int tagihan, String status_tagihan, String tgl_bayar){
          this.id_tagihan = id_tagihan;
-         this.id_member = id_member;
+         this.nama_member = nama_member;
          this.tagihan = tagihan;
          this.status_tagihan = status_tagihan;
          this.tgl_bayar = tgl_bayar;
@@ -37,13 +37,15 @@ public class DataTagihan2 {
         this.id_tagihan = id_tagihan;
     }
 
-    public String getId_member() {
-        return id_member;
+    public String getNama_member() {
+        return nama_member;
     }
 
-    public void setId_member(String id_member) {
-        this.id_member = id_member;
+    public void setNama_member(String nama_member) {
+        this.nama_member = nama_member;
     }
+
+   
 
     public String getStatus_tagihan() {
         return status_tagihan;

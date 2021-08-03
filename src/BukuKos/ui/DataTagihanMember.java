@@ -42,7 +42,7 @@ public class DataTagihanMember extends javax.swing.JFrame {
         for (int i = 0; i < list.size(); i++) {
 
             row[0] = list.get(i).getId_tagihan();
-            row[1] = list.get(i).getId_member();
+            row[1] = list.get(i).getNama_member();
             row[2] = list.get(i).getTagihan();
             row[3] = list.get(i).getStatus_tagihan();
             row[4] = list.get(i).getTgl_bayar();
@@ -55,14 +55,14 @@ public class DataTagihanMember extends javax.swing.JFrame {
         ArrayList<DataTagihan2> dataTagihan = new ArrayList<>();
         try {
             Connection con = Koneksi2.getConnection();
-            String sql = "SELECT id_tagihan, id_member, tagihan, status_tagihan, "
+            String sql = "SELECT id_tagihan, nama_member, tagihan, status_tagihan, "
                     + "tgl_bayar FROM tb_tagihan";
             pst = con.prepareStatement(sql);
             rs = pst.executeQuery();
             DataTagihan2 DataTagihan;
             while (rs.next()) {
                 DataTagihan = new DataTagihan2(rs.getString("id_tagihan"), rs.getString
-                ("id_member"), rs.getInt("tagihan"), rs.getString("status_tagihan"), 
+                ("nama_member"), rs.getInt("tagihan"), rs.getString("status_tagihan"), 
                         rs.getString("tgl_bayar"));
                 dataTagihan.add(DataTagihan);
             }
