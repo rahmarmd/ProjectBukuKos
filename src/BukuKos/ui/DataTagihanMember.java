@@ -56,7 +56,7 @@ public class DataTagihanMember extends javax.swing.JFrame {
         try {
             Connection con = Koneksi2.getConnection();
             String sql = "SELECT id_tagihan, nama_member, tagihan, status_tagihan, "
-                    + "tgl_bayar FROM tb_tagihan";
+                    + "tgl_bayar FROM tb_tagihan_nota";
             pst = con.prepareStatement(sql);
             rs = pst.executeQuery();
             DataTagihan2 DataTagihan;
@@ -93,6 +93,7 @@ public class DataTagihanMember extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         btn_refresh4 = new javax.swing.JButton();
         btn_cetak2 = new javax.swing.JButton();
+        txt_hapus3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -176,6 +177,15 @@ public class DataTagihanMember extends javax.swing.JFrame {
         });
         jPanel1.add(btn_cetak2, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 260, -1, -1));
 
+        txt_hapus3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/BukuKos/icon/delete.png"))); // NOI18N
+        txt_hapus3.setText("Hapus");
+        txt_hapus3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_hapus3ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txt_hapus3, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 260, -1, 30));
+
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 680, 310));
 
         pack();
@@ -215,6 +225,24 @@ public class DataTagihanMember extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_btn_cetak2ActionPerformed
+
+    private void txt_hapus3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_hapus3ActionPerformed
+        try {
+
+            int row = tagihan2_table.getSelectedRow();
+            Connection con = Koneksi2.getConnection();
+            String value = (tagihan2_table.getModel().getValueAt(row, 0).toString());
+            String sql = "DELETE FROM tb_tagihan WHERE id_tagihan = '" + value + "'";
+            pst = con.prepareStatement(sql);
+            pst.executeUpdate();
+            DefaultTableModel model = (DefaultTableModel) tagihan2_table.getModel();
+            model.setRowCount(0);
+            futchData();
+            JOptionPane.showMessageDialog(null, "Data terhapus");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, e.getMessage());
+        }
+    }//GEN-LAST:event_txt_hapus3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -266,5 +294,6 @@ public class DataTagihanMember extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTable tagihan2_table;
     private javax.swing.JTextField txt_cari;
+    private javax.swing.JButton txt_hapus3;
     // End of variables declaration//GEN-END:variables
 }

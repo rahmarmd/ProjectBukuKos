@@ -33,7 +33,18 @@ public class DataTagihan extends javax.swing.JFrame {
     public DataTagihan() {
         initComponents();
         futchData();
+        setDateDefault();
         updateCombo();
+    }
+
+    private void setDateDefault() {
+        try {
+            String date = "01 Jan 0000";
+            Date date2 = new SimpleDateFormat("dd MMM yyyy").parse(date);
+            txt_tglbayar.setDate(date2);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     private void updateCombo() {
@@ -90,6 +101,87 @@ public class DataTagihan extends javax.swing.JFrame {
         return dataTagihan;
     }
 
+    public void tambahDataTemp() {
+        SimpleDateFormat Date_Format = new SimpleDateFormat("yyyy-MM-dd");
+
+        String statusItem = combo_status.getSelectedItem().toString();
+        String status = statusItem.split("\\)", 2)[0];
+        try {
+            Connection con = Koneksi2.getConnection();
+            //query insert data ke dalam database mysql
+            pst = con.prepareStatement("INSERT INTO tb_tagihan_nota (id_tagihan, nama_member, tagihan, status_tagihan, tgl_bayar) VALUES(?,?,?,?,?)");
+            //validasi ketika textField kosong
+
+            if (txt_idtagihan.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "ID Tagihan tidak boleh kosong");
+            } else if (txt_tagihan.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Tagihan tidak boleh kosong");
+            } else {
+                //digunakan untuk memasukkan data ke masing2 variabel textfield seperti namaTxt, dll
+                
+                //misal bingung pst sama rs bisa diliat di variabel diatas
+                pst.setString(1, txt_idtagihan.getText());
+                pst.setString(2, combo_nama_member.getSelectedItem().toString());
+                pst.setString(3, txt_tagihan.getText());
+                pst.setString(4, combo_status.getSelectedItem().toString());
+                pst.setString(5, Date_Format.format(txt_tglbayar.getDate()));
+                pst.executeUpdate();
+
+                //setelah nginput data kasih ini biar textfieldnya kosong lagi
+                txt_idtagihan.setText("");
+                //txt_idmember.setText("");
+                txt_tagihan.setText("");
+                combo_status.setSelectedItem("");
+
+                //setelah daftar muncul pop up dafatar berhasil dan akan tampil frame baru
+                JOptionPane.showMessageDialog(null, "Tambah Data Berhasil");
+            }
+
+        } catch (Exception e) {
+//            JOptionPane.showMessageDialog(null, "Error " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void tambahDataTemp2(){
+         SimpleDateFormat Date_Format = new SimpleDateFormat("yyyy-MM-dd");
+
+        String statusItem = combo_status.getSelectedItem().toString();
+        String status = statusItem.split("\\)", 2)[0];
+        try {
+            Connection con = Koneksi2.getConnection();
+            //query insert data ke dalam database mysql
+            pst = con.prepareStatement("INSERT INTO tb_tagihan (id_tagihan, nama_member, tagihan, status_tagihan, tgl_bayar) VALUES(?,?,?,?,?)");
+            //validasi ketika textField kosong
+
+            if (txt_idtagihan.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "ID Tagihan tidak boleh kosong");
+            } else if (txt_tagihan.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Tagihan tidak boleh kosong");
+            } else {
+                //digunakan untuk memasukkan data ke masing2 variabel textfield seperti namaTxt, dll
+
+                //misal bingung pst sama rs bisa diliat di variabel diatas
+                pst.setString(1, txt_idtagihan.getText());
+                pst.setString(2, combo_nama_member.getSelectedItem().toString());
+                pst.setString(3, txt_tagihan.getText());
+                pst.setString(4, combo_status.getSelectedItem().toString());
+                pst.setString(5, Date_Format.format(txt_tglbayar.getDate()));
+                pst.executeUpdate();
+
+              
+
+                //setelah daftar muncul pop up dafatar berhasil dan akan tampil frame baru
+                JOptionPane.showMessageDialog(null, "Tambah Data Berhasil");
+               
+
+            }
+        } catch (Exception e) {
+//            JOptionPane.showMessageDialog(null, "Error " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
     public void tampilkanData() {
         Koneksi2 koneksi = new Koneksi2();
         int jumlahrow = tagihan_table.getRowCount();
@@ -160,6 +252,8 @@ public class DataTagihan extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.add(combo_nama_member, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 100, 190, -1));
+
+        txt_tglbayar.setDateFormatString("yyyy, MM, dd");
         jPanel1.add(txt_tglbayar, new org.netbeans.lib.awtextra.AbsoluteConstraints(421, 130, 210, -1));
 
         btn_tambah3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/BukuKos/icon/button (1).png"))); // NOI18N
@@ -293,45 +387,10 @@ public class DataTagihan extends javax.swing.JFrame {
 
     private void btn_tambah3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_tambah3ActionPerformed
         // masukan data ke dalam database
-        SimpleDateFormat Date_Format = new SimpleDateFormat("yyyy-MM-dd");
-
-        String statusItem = combo_status.getSelectedItem().toString();
-        String status = statusItem.split("\\)", 2)[0];
-        try {
-            Connection con = Koneksi2.getConnection();
-            //query insert data ke dalam database mysql
-            pst = con.prepareStatement("INSERT INTO tb_tagihan (id_tagihan, nama_member, tagihan, status_tagihan, tgl_bayar) VALUES(?,?,?,?,?)");
-            //validasi ketika textField kosong
-
-            if (txt_idtagihan.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "ID Tagihan tidak boleh kosong");
-            } else if (txt_tagihan.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Tagihan tidak boleh kosong");
-            } else {
-                //digunakan untuk memasukkan data ke masing2 variabel textfield seperti namaTxt, dll
-
-                //misal bingung pst sama rs bisa diliat di variabel diatas
-                pst.setString(1, txt_idtagihan.getText());
-                pst.setString(2, combo_nama_member.getSelectedItem().toString());
-                pst.setString(3, txt_tagihan.getText());
-                pst.setString(4, combo_status.getSelectedItem().toString());
-                pst.setString(5, Date_Format.format(txt_tglbayar.getDate()));
-                pst.executeUpdate();
-
-                //setelah nginput data kasih ini biar textfieldnya kosong lagi
-                txt_idtagihan.setText("");
-                //txt_idmember.setText("");
-                txt_tagihan.setText("");
-                combo_status.setSelectedItem("");
-
-                //setelah daftar muncul pop up dafatar berhasil dan akan tampil frame baru
-                JOptionPane.showMessageDialog(null, "Tambah Data Berhasil");
-            }
-
-        } catch (Exception e) {
-//            JOptionPane.showMessageDialog(null, "Error " + e.getMessage());
-            e.printStackTrace();
-        }
+        tambahDataTemp2();
+        tambahDataTemp();
+        
+       
     }//GEN-LAST:event_btn_tambah3ActionPerformed
 
     private void btn_kembali3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_kembali3ActionPerformed
@@ -394,7 +453,7 @@ public class DataTagihan extends javax.swing.JFrame {
         txt_idtagihan.setText(model.getValueAt(i, 0).toString());
         // txt_idmember.setText(model.getValueAt(i, 1).toString());
         txt_tagihan.setText(model.getValueAt(i, 2).toString());
-
+        // txt_tglbayar.setDate(model.getValueAt(i, 5));
         combo_status.setSelectedItem(model.getValueAt(i, 3).toString());
     }//GEN-LAST:event_tagihan_tableMouseClicked
 
@@ -429,12 +488,24 @@ public class DataTagihan extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_cari2KeyReleased
 
     private void btn_cetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cetakActionPerformed
-        try {
-            JasperPrint jp = JasperFillManager.fillReport(getClass().getResourceAsStream("reportTagihan.jasper"), null, Koneksi2.getConnection());
-            JasperViewer.viewReport(jp, false);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(rootPane, e);
+        int selectedRow = tagihan_table.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Pilih Baris Dulu");
+        } else {
+            try {
+                JasperPrint jp = JasperFillManager.fillReport(getClass().getResourceAsStream("reportTagihan.jasper"), null, Koneksi2.getConnection());
+                JasperViewer.viewReport(jp, false);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(rootPane, e);
+            }
         }
+
+//        try {
+//            JasperPrint jp = JasperFillManager.fillReport(getClass().getResourceAsStream("reportTagihan.jasper"), null, Koneksi2.getConnection());
+//            JasperViewer.viewReport(jp, false);
+//        } catch (Exception e) {
+//            JOptionPane.showMessageDialog(rootPane, e);
+//        }
 
     }//GEN-LAST:event_btn_cetakActionPerformed
 
